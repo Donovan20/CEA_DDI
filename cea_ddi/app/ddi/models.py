@@ -50,3 +50,8 @@ class Proyectos(models.Model):
     observaciones = models.CharField(max_length=300)
     archivo = models.FileField(null= True,blank= True)
 
+class Aprobados(models.Model):
+    proyecto = models.ForeignKey(Proyectos, on_delete = models.CASCADE)
+    cobro = models.IntegerField()
+    vivienda = models.CharField(max_length=50)
+    costo = models.IntegerField()
