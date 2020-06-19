@@ -10,6 +10,7 @@ class Expediente(models.Model):
 class Desarrolladora(models.Model):
     represante = models.CharField(max_length=150)
     nombre = models.CharField(max_length=100)
+    propietario = models.CharField(max_length=150, blank=True, null = True)
 
 class Categorias(models.Model):
     nombre = models.CharField(max_length=50)
@@ -18,9 +19,6 @@ class SubCategorias(models.Model):
 
     categoria = models.ForeignKey(Categorias,on_delete=models.CASCADE)
     nombre = models.CharField(max_length=50)
-
-class Obras(models.Model):
-    tipo = models.CharField(max_length=150)
 
 class Estados(models.Model):
     
@@ -35,12 +33,10 @@ class Proyectos(models.Model):
     nombre = models.CharField(max_length=150)
     expediente = models.ForeignKey(Expediente,on_delete=models.CASCADE)
     desarrolladora = models.ForeignKey(Desarrolladora, on_delete= models.CASCADE)
-    propietario = models.CharField(max_length=150, blank=True, null = True)
     tipo = models.ForeignKey(SubCategorias, on_delete=models.CASCADE)
     responsable = models.ForeignKey(User, on_delete=models.CASCADE)
     revisador = models.ForeignKey(User,on_delete=models.CASCADE)
     status = models.ForeignKey(Estados,on_delete= models.CASCADE)
-    obra = models.ForeignKey(Obras, on_delete=models.CASCADE)
     folio = models.CharField(max_length=13)
     fecha_ingreso = models.DateField(auto_now=False, auto_now_add=False)
     fecha_programada = models.DateField(auto_now=False, auto_now_add=False)
@@ -52,6 +48,6 @@ class Proyectos(models.Model):
 
 class Aprobados(models.Model):
     proyecto = models.ForeignKey(Proyectos, on_delete = models.CASCADE)
-    cobro = models.IntegerField()
+    gasto_m3_seg = models.IntegerField()
     vivienda = models.CharField(max_length=50)
     costo = models.IntegerField()
