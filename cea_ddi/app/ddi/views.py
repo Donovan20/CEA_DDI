@@ -9,7 +9,7 @@ from app.ddi.forms import CateForm
 from app.ddi.models import SubCategorias
 from app.ddi.forms import SubCateForm 
 
-import re
+from re import compile
 
 # Create your views here.
 
@@ -25,7 +25,7 @@ def agregar_expediente(request):
     if request.method == 'POST':
         form = ExpForm(request.POST)
         if form.is_valid():
-            folio = ''
+            folio = compile(r'^[A-z][A-z]\-[0-9][0-9][0-9]\-[0-9][0-9]\-[A-z]$')
             pass
     else:
         form = ExpForm()
@@ -36,7 +36,7 @@ def editar_expediente(request,pk):
     if request.method == 'POST':
         form = ExpForm(request.POST, instance=expediente)
         if form.is_valid():
-            folio = ''
+            folio = compile(r'^[A-z][A-z]\-[0-9][0-9][0-9]\-[0-9][0-9]\-[A-z]$')
             pass
     else:
         form = ExpForm(instance=expediente)
