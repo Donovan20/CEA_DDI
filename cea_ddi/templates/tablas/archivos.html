@@ -1,0 +1,32 @@
+        <table class="table table-striped jambo_table bulk_action">
+                <thead>
+                    <tr class="headings">
+                        <th class="column-title">Nombre </th>
+                        <th class="column-title">Fecha </th>
+                        <th class="column-title no-link last"><span class="nobr"></span></th>
+                    </tr>
+                </thead>
+                <tbody>
+               
+                    <input type="hidden" value="<?php echo $id;?>" id="id<?php echo $id;?>">
+                    <input type="hidden" value="<?php echo $description;?>" id="description<?php echo $id;?>">
+                    <input type="hidden" value="<?php echo $name;?>" id="name<?php echo $id;?>">
+
+
+                    <tr class="even pointer">
+                        <td style="width: 200px"></td>
+                        <td></td>
+                        <td style="width: 150px"><span class="pull-right">
+                       <a href="#" class='btn btn-default' title='Editar producto' onclick="obtener_datos('');" data-toggle="modal" data-target=".bs-example-modal-lg-upd"><i class="glyphicon glyphicon-edit"></i></a> 
+                        <a href="#" class='btn btn-default' title='Borrar archivo' onclick="eliminar('')"><i class="glyphicon glyphicon-trash"></i> </a></span></td>
+                    </tr>
+               
+                <tr>
+                    <td colspan=6><span class="pull-right">
+                        
+                    </span></td>
+                </tr>
+              </table>
+            </div>
+             
+           

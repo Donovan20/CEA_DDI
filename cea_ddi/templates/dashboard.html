@@ -1,0 +1,68 @@
+<?php 
+$title ="Dashboard - "; 
+include "head.php";
+include "sidebar.php";
+?>
+
+<div class="right_col" role="main"> <!-- page content -->
+  <div class="">
+    <div class="page-title">
+      <div class="row top_tiles">
+        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+          <div class="tile-stats">
+            <div class="icon"><i class="fa fa-ticket"></i></div>
+            <div class="count"><h1>21</h1></div>
+            <h3>Proyectos</h3>
+          </div>
+        </div>
+        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+          <div class="tile-stats">
+           <div class="icon"><i class="fa fa-list-alt"></i></div>
+           <div class="count"><h1>21</h1></div>
+           <h3>Expedientes</h3>
+         </div>
+       </div>
+       <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="tile-stats">
+         <div class="icon"><i class="fa fa-th-list"></i></div>
+         <div class="count"><h1>21</h1></div>
+         <h3>Reportes</h3>
+       </div>
+     </div>
+     <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+      <div class="tile-stats">
+        <div class="icon"><i class="fa fa-users"></i></div>
+        <div class="count"><h1>21</h1></div>
+        <h3>Archivos</h3>
+      </div>
+    </div>
+  </div>
+  <!-- content -->
+    </div>
+  </div>
+</div>
+
+<!-- /page content -->
+
+
+
+<?php include "footer.php" ?>
+<script>
+  $(function(){
+    $("input[name='file']").on("change", function(){
+      var formData = new FormData($("#formulario")[0]);
+      var ruta = "action/upload-profile.php";
+      $.ajax({
+        url: ruta,
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(datos)
+        {
+          $("#respuesta").html(datos);
+        }
+      });
+    });
+  });
+</script>
