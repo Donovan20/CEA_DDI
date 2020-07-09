@@ -6,7 +6,7 @@ function load(page){
 	var q= $("#q").val();
 	$("#loader").fadeIn('slow');
 	$.ajax({
-		url:'./tablas/proyectos.html}?action=ajax&page='+page+'&q='+q,
+		url:'./tablas/proyectos.html?action=ajax&page='+page+'&q='+q,
 		beforeSend: function(objeto){
 			$('#loader').html('<img src="./images/ajax-loader.gif"> Cargando...');
 		},
