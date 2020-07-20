@@ -1,0 +1,177 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title></title>
+
+        <!-- Bootstrap -->
+        <link href="{% static 'css/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+        <!-- Font Awesome -->
+        <link href="{% static 'css/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+        <!-- NProgress -->
+        <link href="{% static 'css/nprogress/nprogress.css' %}" rel="stylesheet">
+            <!-- iCheck -->
+        <link href="{% static 'css/iCheck/skins/flat/green.css' %}" rel="stylesheet">
+        <!-- Datatables -->
+        <link href="{% static 'css/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+        <link href="{% static 'css/datatables.net-buttons-bs/css/buttons.bootstrap.min.css' %}" rel="stylesheet">
+        <link href="{% static 'css/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css' %}" rel="stylesheet">
+        <link href="{% static 'css/datatables.net-responsive-bs/css/responsive.bootstrap.min.css' %}" rel="stylesheet">
+        <link href="{% static 'css/datatables.net-scroller-bs/css/scroller.bootstrap.min.css' %}" rel="stylesheet">
+        <!-- jQuery custom content scroller -->
+        <link href="{% static 'css/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css' %}" rel="stylesheet"/>
+
+        <!-- bootstrap-daterangepicker -->
+        <link href="{% static 'css/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+
+        <!-- Custom Theme Style -->
+        <link href="{% static 'css/custom.min.css' %}" rel="stylesheet">
+
+        <!-- MICSS button[type="file"] -->
+        <link rel="stylesheet" href="{% static 'css/micss.css' %}">
+
+    </head>
+
+    <body class="nav-md">
+        <div class="container body">
+            <div class="main_container">
+                <div class="col-md-3 left_col">
+                    <div class="left_col scroll-view">
+                        <div class="navbar nav_title" style="border: 0;">
+                            <a href="dashboard.php"><img src="{% static 'img/logocea.png' %}" style="width: 230px; height: 57px; background: #EDEDED;"></a>
+                        </div>
+                        <div class="clearfix"></div>
+
+                        <!-- menu profile quick info -->
+                        <div class="profile clearfix">
+                            <div class="profile_pic">
+                                <img src="{% static 'img/profiles/default.png' %}" class="img-circle profile_img">
+                            </div>
+                            <div class="profile_info">
+                                <span>Bienvenido</span>
+                                <h2>prueba</h2>
+                            </div>
+                        </div>
+                        <!-- /menu profile quick info -->
+
+                        <br/>
+                        <div id="sidebar-menu" class="main_menu_side hidden-print main_menu"><!-- sidebar menu -->
+                            <div class="menu_section">
+                                <ul class="nav side-menu">
+                                    <li class="<?php if(isset($active1)){echo $active1;}?>">
+                                        <a href="/"><i class="fa fa-dashboard"></i> Dashboard</a>
+                                    </li>
+
+                                    <li class="<?php if(isset($active2)){echo $active2;}?>">
+                                        <a href="proyectos.php"><i class="fa fa-list-alt"></i>Proyectos</a>
+                                    </li>
+                                    <li class="<?php if(isset($active2)){echo $active2;}?>">
+                                        <a href="archivos.php"><i class="fa fa-list-alt"></i> Archivos</a>
+                                    </li>
+                                    <li class="<?php if(isset($active3)){echo $active3;}?>">
+                                        <a href="/expedientes/"><i class="fa fa-list-alt"></i> Expedientes</a>
+                                    </li>
+
+                                    <li class="<?php if(isset($active4)){echo $active4;}?>">
+                                        <a href="reports.php"><i class="fa fa-area-chart"></i> Reportes</a>
+                                    </li>
+
+                                    <li class="<?php if(isset($active5)){echo $active5;}?>">
+                                        <a href="/desarrolladoras/"><i class="fa fa-align-left"></i> Desarrolladoras y representantes</a>
+                                    </li>
+
+                                    <li class="<?php if(isset($active7)){echo $active7;}?>">
+                                        <a href="/categorias/"><i class="fa fa-align-left"></i> Categorias</a>
+                                    </li>
+
+                                    <li class="<?php if(isset($active8)){echo $active8;}?>">
+                                        <a href="/subcategorias/"><i class="fa fa-align-left"></i> Subcategorias</a>
+                                    </li>
+
+                                    <li class="<?php if(isset($active6)){echo $active6;}?>">
+                                        <a href="users.php"><i class="fa fa-users"></i> Usuarios</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div><!-- /sidebar menu -->
+                    </div>
+                </div>
+
+     
+                <div class="top_nav"><!-- top navigation -->
+                    <div class="nav_menu">
+                        <nav>
+                            <div class="nav toggle">
+                                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                            </div>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li class="">
+                                    <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                    <img src="" alt="">
+                                        <span class=" fa fa-angle-down"></span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                        <li><a href="dashboard.php"><i class="fa fa-user"></i> Mi cuenta</a></li>
+                                        <li><a href="action/logout.php"><i class="fa fa-sign-out pull-right"></i> Cerrar Sesión</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div><!-- /top navigation -->    
+                <!-------------------------------------Contenido----------------------------->
+                {% block content %}
+            
+                {% endblock %}
+<!----------------------------Contenido----------------------------------->
+                <footer><!-- footer content -->
+                    <div class="pull-right">
+                        
+                    </div>
+                    <div class="clearfix"></div>
+                </footer><!-- /footer content -->
+            </div>
+        </div>
+
+        <!-- jQuery -->
+        <script src="{% static 'js/jquery/dist/jquery.min.js' %}"></script>
+        <!-- Bootstrap -->
+        <script src="{% static 'css/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+        <!-- FastClick -->
+        <script src="{% static 'js/fastclick/lib/fastclick.js' %}"></script>
+        <!-- NProgress -->
+        <script src="{% static 'css/nprogress/nprogress.js' %}"></script> 
+        <!-- iCheck -->
+        <script src="{% static 'css/iCheck/icheck.min.js' %}"></script>
+        <!-- jQuery custom content scroller -->
+        <script src="{% static 'css/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js' %}"></script>
+        <!-- Datatables -->
+        <script src="{% static 'js/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+        <script src="{% static 'css/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+        <script src="{% static 'js/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+        <script src="{% static 'css/datatables.net-buttons-bs/js/buttons.bootstrap.min.js' %}"></script>
+        <script src="{% static 'js/datatables.net-buttons/js/buttons.flash.min.js' %}"></script>
+        <script src="{% static 'js/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
+        <script src="{% static 'js/datatables.net-buttons/js/buttons.print.min.js' %}"></script>
+        <script src="{% static 'js/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js' %}"></script>
+        <script src="{% static 'js/datatables.net-keytable/js/dataTables.keyTable.min.js' %}"></script>
+        <script src="{% static 'js/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+        <script src="{% static 'css/datatables.net-responsive-bs/js/responsive.bootstrap.js' %}"></script>
+        <script src="{% static 'js/datatables.net-scroller/js/dataTables.scroller.min.js' %}"></script>
+        <script src="{% static 'js/jszip/dist/jszip.min.js' %}"></script>
+        <script src="{% static 'js/pdfmake/build/pdfmake.min.js' %}"></script>
+        <script src="{% static 'js/pdfmake/build/vfs_fonts.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/funciones.js' %}"></script>
+        <!-- Custom Theme Scripts -->
+        <script src="{% static 'js/custom.min.js' %}"></script>
+        <!-- DateJS -->
+        <!-- <script src="js/DateJS/build/date.js"></script> -->
+        <!-- bootstrap-daterangepicker -->
+        <script src="{% static 'js/moment/min/moment.min.js' %}"></script>
+        <script src="{% static 'css/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+    </body>
+</html>

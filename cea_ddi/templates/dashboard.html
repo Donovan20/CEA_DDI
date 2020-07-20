@@ -1,9 +1,5 @@
-<?php 
-$title ="Dashboard - "; 
-include "head.php";
-include "sidebar.php";
-?>
-
+{% extends 'base.html' %}
+{% block content %}
 <div class="right_col" role="main"> <!-- page content -->
   <div class="">
     <div class="page-title">
@@ -42,11 +38,9 @@ include "sidebar.php";
   </div>
 </div>
 
+
 <!-- /page content -->
 
-
-
-<?php include "footer.php" ?>
 <script>
   $(function(){
     $("input[name='file']").on("change", function(){
@@ -66,3 +60,5 @@ include "sidebar.php";
     });
   });
 </script>
+
+{% endblock %}

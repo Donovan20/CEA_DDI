@@ -4,16 +4,19 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class Expediente(models.Model):
-    numero = models.IntegerField(max_length=10)
+    numero = models.CharField(max_length=11)
     fraccionamiento = models.CharField(max_length=150)
 
 class Desarrolladora(models.Model):
-    represante = models.CharField(max_length=150)
+    representante = models.CharField(max_length=150)
     nombre = models.CharField(max_length=100)
     propietario = models.CharField(max_length=150, blank=True, null = True)
 
 class Categorias(models.Model):
     nombre = models.CharField(max_length=50)
+
+    def __str__(self):
+        return str(self.nombre)
 
 class SubCategorias(models.Model):
 
@@ -34,8 +37,8 @@ class Proyectos(models.Model):
     expediente = models.ForeignKey(Expediente,on_delete=models.CASCADE)
     desarrolladora = models.ForeignKey(Desarrolladora, on_delete= models.CASCADE)
     tipo = models.ForeignKey(SubCategorias, on_delete=models.CASCADE)
-    responsable = models.ForeignKey(User, on_delete=models.CASCADE)
-    revisador = models.ForeignKey(User,on_delete=models.CASCADE)
+    responsable = models.ForeignKey(User, on_delete=models.CASCADE, related_name='responsable')
+    revisador = models.ForeignKey(User,on_delete=models.CASCADE, related_name='revisador')
     status = models.ForeignKey(Estados,on_delete= models.CASCADE)
     folio = models.CharField(max_length=13)
     fecha_ingreso = models.DateField(auto_now=False, auto_now_add=False)

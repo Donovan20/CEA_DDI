@@ -1,0 +1,109 @@
+{% extends 'base.html' %}       
+{% load static %}
+
+
+{% block content %}
+    <div class="right_col" role="main"> <!-- page content -->
+        <div class="">
+            <div class="page-title">
+                <div class="clearfix"></div>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div> 
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg-new"><i class="fa fa-plus-circle"></i> Agregar Subcategoria</button>
+                    </div>
+                    <div class="modal fade bs-example-modal-lg-new" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-md">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel">Agregar/Editar Subcategoria</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="form-horizontal form-label-left input_mask" method="post" id="add" name="add">
+                                        {% csrf_token %}
+                                        <div id="result"></div>
+                                         <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Categoria<span class="required">*</span></label>
+                                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                              {{form.categoria}}
+                                            </div>
+                                        </div>
+                                         <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Nombre subcategoria<span class="required">*</span></label>
+                                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                              {{form.nombre}}
+                                            </div>
+                                        </div>
+                                        <div class="ln_solid"></div>
+                                        <div class="form-group">
+                                            <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                                              <button id="save_data" type="submit" class="btn btn-success">Guardar</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- /Modal -->
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Subcategorias</h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                </li>
+                                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                                </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                        
+                        <!-- Form search -->
+                        <form class="form-horizontal" role="form" id="ingresos">
+                            <div class="form-group row">
+                                <label for="q" class="col-md-2 control-label">Numero</label>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="q" placeholder="Numero de Expediente" onkeyup='load(1);'>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" class="btn btn-default" onclick='load(1);'>
+                                        <span class="glyphicon glyphicon-search" ></span> Buscar</button>
+                                    <span id="loader"></span>
+                                </div>
+                            </div>
+                        </form>     
+                        <!-- end Form search -->
+
+
+                        <div class="x_content">
+                            <table class="table table-striped jambo_table bulk_action">
+                                <thead>
+                                    <tr class="headings">
+                                        <th class="column-title">Categoria</th>
+                                        <th class="column-title">Subcategoria</th>
+                                        <th class="column-title no-link last"><span class="nobr"></span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for s in subcategorias %}
+                                        <tr class="even pointer">
+                                            <td style="width: 200px"> {{s.categoria.nombre}}</td>
+                                            <td style="width: 200px"> {{s.nombre}}</td>
+                                            <td style="width: 150px"><span class="pull-right">
+                                            <a href="#" class='btn btn-default' title='Editar producto' onclick="obtener_datos('{{s.pk}}','{{csrf_token}}','s');" data-toggle="modal" data-target=".bs-example-modal-lg-udp"><i class="glyphicon glyphicon-edit"></i></a> 
+                                            <a href="#" class='btn btn-default' title='Borrar producto' onclick="eliminar('{{s.pk}}','{{csrf_token}}','s')"><i class="glyphicon glyphicon-trash"></i> </a></span></td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /page content -->
+
+{% endblock %}
