@@ -45,7 +45,39 @@ class SubCateForm(forms.ModelForm):
 class ProyeForm(forms.ModelForm):
     class Meta:
         model = Proyectos
-        fields = '__all__'
+        fields = {'nombre','expediente','desarrolladora','tipo','responsable','revisador','folio','fecha_ingreso'}
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class':'form-control'}),
+            'expediente' : forms.Select(attrs={'class':'form-control'}),
+            'desarrolladora' : forms.Select(attrs={'class':'form-control'}),
+            'tipo' : forms.Select(attrs={'class':'form-control'}),
+            'responsable' : forms.Select(attrs={'class':'form-control'}),
+            'revisador' : forms.Select(attrs={'class':'form-control'}),
+            'folio': forms.TextInput(attrs={'class':'form-control'}),
+            'fecha_ingreso': forms.DateInput(attrs={'class':'form-control','type':'date'})
+        }
+class ProyeEditForm(forms.ModelForm):
+    class Meta:
+        s = (
+            ('A','Aprobado'),
+            ('E', 'En espera de reingreso'),
+            ('R', 'En revision'),
+            ('I', 'Revisado')
+        ) 
+        model = Proyectos
+        fields = {'nombre','expediente','desarrolladora','tipo','responsable','revisador','folio','fecha_ingreso','status', 'observaciones',}
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class':'form-control'}),
+            'expediente' : forms.Select(attrs={'class':'form-control'}),
+            'desarrolladora' : forms.Select(attrs={'class':'form-control'}),
+            'tipo' : forms.Select(attrs={'class':'form-control'}),
+            'responsable' : forms.Select(attrs={'class':'form-control'}),
+            'revisador' : forms.Select(attrs={'class':'form-control'}),
+            'folio': forms.TextInput(attrs={'class':'form-control'}),
+            'status':forms.Select(choices= s,attrs={'class':'form-control'}),
+            'observaciones': forms.Textarea(attrs={'class':'form-control'})
+
+        }
 
 class AproForm(forms.ModelForm):
     class Meta:

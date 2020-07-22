@@ -1,18 +1,91 @@
-<?php
-    $title ="Proyecto ";
-    include "head.php";
-    include "sidebar.php";
-?>
+{% extends 'base.html' %}       
+{% load static %}
 
-    <div class="right_col" role="main"><!-- page content -->
+
+{% block content %}
+    <div class="right_col" role="main"> <!-- page content -->
         <div class="">
             <div class="page-title">
                 <div class="clearfix"></div>
                 <div class="col-md-12 col-sm-12 col-xs-12">
-                    <?php
-                        include("modal/new_proyecto.php");
-                        include("modal/upd_proyecto.php");
-                    ?>
+                    <div> 
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg-new"><i class="fa fa-plus-circle"></i> Agregar Proyecto</button>
+                    </div>
+                    <div class="modal fade bs-example-modal-lg-new" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-md">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel">Agregar Proyecto</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="form-horizontal form-label-left input_mask" method="post" id="add" name="add">
+                                        {% csrf_token %}
+                                        <div id="result"></div>
+                                         <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Expediente<span class="required">*</span></label>
+                                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                              {{form.expediente}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Desarrolladora<span class="required">*</span></label>
+                                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                              {{form.desarrolladora}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Nombre del proyecto<span class="required">*</span></label>
+                                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                              {{form.nombre}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Categoria<span class="required">*</span></label>
+                                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                              {{form.tipo}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Responsable<span class="required">*</span></label>
+                                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                              {{form.responsable}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Revisador<span class="required">*</span></label>
+                                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                              {{form.revisador}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Folio<span class="required">*</span></label>
+                                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                              {{form.folio}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Fecha de ingreso<span class="required">*</span></label>
+                                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                              {{form.fecha_ingreso}}
+                                            </div>
+                                        </div>
+                                        <div class="ln_solid"></div>
+                                        <div class="form-group">
+                                            <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                                              <button id="save_data" type="submit" class="btn btn-success">Guardar</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- /Modal -->
+
                     <div class="x_panel">
                         <div class="x_title">
                             <h2>Proyectos</h2>
@@ -25,12 +98,12 @@
                             <div class="clearfix"></div>
                         </div>
                         
-                        <!-- form seach -->
-                        <form class="form-horizontal" role="form" id="gastos">
+                        <!-- Form search -->
+                        <form class="form-horizontal" role="form" id="ingresos">
                             <div class="form-group row">
-                                <label for="q" class="col-md-2 control-label">Nombre/Asunto</label>
+                                <label for="q" class="col-md-2 control-label">Numero</label>
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control" id="q" placeholder="Nombre del Proyecto" onkeyup='load(1);'>
+                                    <input type="text" class="form-control" id="q" placeholder="Numero de Expediente" onkeyup='load(1);'>
                                 </div>
                                 <div class="col-md-3">
                                     <button type="button" class="btn btn-default" onclick='load(1);'>
@@ -39,16 +112,39 @@
                                 </div>
                             </div>
                         </form>     
-                        <!-- end form seach -->
+                        <!-- end Form search -->
 
 
                         <div class="x_content">
                             <div class="table-responsive">
-                                <!-- ajax -->
-                                    <div id="resultados"> </div><!-- Carga los datos ajax -->
-
-                                    <div class='outer_div'></div><!-- Carga los datos ajax -->
-                                <!-- /ajax -->
+                                <table class="table table-striped jambo_table bulk_action">
+                                    <thead>
+                                        <tr class="headings">
+                                            <th class="column-title">Expediente</th>
+                                            <th class="column-title">Desarrolladora</th>
+                                            <th class="column-title">Nombre Proyecto</th>
+                                            <th class="column-title">Responsable</th>
+                                            <th class="column-title">Revisador</th>
+                                            <th class="column-title">No Ingresos</th>
+                                            <th class="column-title no-link last"><span class="nobr"></span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for p in proyectos %}
+                                            <tr class="even pointer">
+                                                <td style="width: 200px"> {{p.expediente__numero}}</td>
+                                                <td style="width: 200px"> {{p.desarrolladora__nombre}}</td>
+                                                <td style="width: 200px"> {{p.nombre}}</td>
+                                                <td style="width: 200px"> {{p.responsable__username}}</td>
+                                                <td style="width: 200px"> {{p.revisador__username}}</td>
+                                                <td style="width: 200px"> {{p.num_ingresos}}</td>
+                                                <td style="width: 150px"><span class="pull-right">
+                                                <a class='btn btn-default' title='Ver ingresos' href ="/proyectos/detalles/{{p.expediente__numero}}/"><i class="glyphicon glyphicon-eye-open"></i></a> 
+                                                <a class='btn btn-default' title='Aprobar Proyecto' ><i class="glyphicon glyphicon-check"></i> </a></span></td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -57,7 +153,4 @@
         </div>
     </div><!-- /page content -->
 
-<?php include "footer.php" ?>
-
-<script type="text/javascript" src="js/proyecto.js"></script>
-<script type="text/javascript" src="js/VentanaCentrada.js"></script>
+{% endblock %}

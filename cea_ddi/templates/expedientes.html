@@ -137,8 +137,8 @@
                                             <td>{{e.numero}}</td>
                                             <td>{{e.fraccionamiento}}</td>
                                             <td ><span class="pull-right">
-                                            <a class='btn btn-default' title='Editar producto' onclick="obtener_datos('{{e.pk}}','{{csrf_token}}','e');" data-toggle="modal" data-target=".bs-example-modal-lg-upd"><i class="glyphicon glyphicon-edit"></i></a> 
-                                            <a class='btn btn-default' title='Borrar producto' onclick="eliminar('{{e.pk}}','{{csrf_token}}','e')"><i class="glyphicon glyphicon-trash"></i> </a></span></td>
+                                            <a class='btn btn-default' title='Editar expediente' href="/expedientes/editar/{{e.pk}}/"><i class="glyphicon glyphicon-edit"></i></a> 
+                                            <a class='btn btn-default' title='Borrar expediente' onclick="eliminar('{{e.pk}}','{{csrf_token}}','e')"><i class="glyphicon glyphicon-trash"></i> </a></span></td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
-from json import dumps
+from django.db.models import Count
 from django.http import HttpResponse
 
 from app.ddi.models import Expediente
@@ -11,10 +11,16 @@ from app.ddi.models import Categorias
 from app.ddi.forms import CateForm
 from app.ddi.models import SubCategorias
 from app.ddi.forms import SubCateForm 
+from app.ddi.models import Proyectos
+from app.ddi.forms import ProyeForm
+from app.ddi.forms import ProyeEditForm
+from app.ddi.models import Estados
 
+from datetime import timedelta
 from re import compile
+from json import dumps
 
-# Create your views here.
+
 
 def index(request):
 
@@ -38,56 +44,12 @@ def lista_expedientes(request):
                 pass
     else:
         form = ExpForm()
-    return render(request,'expedientes.html',{'expedientes':expedientes,'form':form})    
+    return render(request,'expedientes.html',{'expedientes':expedientes,'form':form})
 
-def get_data(request):
-    data = {}
-    if request.POST['bandera'] == 'e':
-        exp = Expediente.objects.get(pk = request.POST['pk'])
-        data = {
-            'numero' : exp.numero,
-            'fraccionamiento' : exp.fraccionamiento,
-            'pk':exp.pk
-        }
-        data = dumps(data)
+def editar_expediente(request, pk):
 
-    elif request.POST['bandera'] == 'd':
-        desa = Desarrolladora.objects.get(pk = request.POST['pk'])
-        data = {
-            'representante' : desa.representante,
-            'nombre' : desa.nombre,
-            'propietario': desa.propietario,
-            'pk':desa.pk
-        }
-        data = dumps(data)
-
-    elif request.POST['bandera'] == 'c':
-        cate = Categorias.objects.get(pk = request.POST['pk'])
-        data = {
-            'nombre' : cate.nombre,
-            'pk': cate.pk
-        }
-        data = dumps(data)
-
-    elif request.POST['bandera'] == 's':
-        sub = SubCategorias.objects.get(pk = request.POST['pk'])
-        data = SubCateForm(instance=sub)
-        print(data.cleaned_data)
-        data ={
-            'categoria' : data['categoria'],
-            'nombre': data['nombre'],
-            'pk':sub.pk
-        }
-        data = dumps(data)
-
-    return HttpResponse(data)
-
-
-
-def editar_expediente(request):
-
+    e = Expediente.objects.get(pk = pk)
     if request.method == 'POST':
-        e = Expediente.objects.get(pk = request.POST['pk'])
         form = ExpForm(request.POST, instance=e)
         if form.is_valid():
             exp = form.save(commit=False)
@@ -98,7 +60,10 @@ def editar_expediente(request):
                 else:
                     exp.save()
                     return redirect('/expedientes/')
-    return HttpResponse('ok')
+    else:
+        form = ExpForm(instance=e)
+        print(form)
+    return render(request,'editExpediente.html',{'form':form})
 
 def eliminar(request):
     url = ""
@@ -138,9 +103,9 @@ def lista_desarrolladoras(request):
         form = DesaForm()
     return render(request,'desarrolladora.html',{'desarrolladoras':desarrolladoras,'form':form})
 
-def editar_desarrolladora(request):
+def editar_desarrolladora(request, pk):
+    d = Desarrolladora.objects.get(pk = pk)
     if request.method == 'POST':
-        d = Desarrolladora.objects.get(pk = request.POST['pk'])
         form = DesaForm(request.POST, instance=d)
         if form.is_valid():
             desa = form.save(commit=False)
@@ -149,7 +114,10 @@ def editar_desarrolladora(request):
             else:
                 desa.save()
                 return redirect('/desarrolladoras/')
-    return HttpResponse('ok')
+    else:
+        form = DesaForm(instance=d)
+        print(form)
+    return render(request,'editDesarrolladora.html',{'form':form})
 
 def lista_categorias(request):
     categorias = Categorias.objects.all()
@@ -165,10 +133,9 @@ def lista_categorias(request):
         form = CateForm()
     return render(request,'categorias.html',{'categorias':categorias,'form':form})
 
-
-def editar_categoria(request):
+def editar_categoria(request, pk):
+    c = Categorias.objects.get(pk = pk)
     if request.method == 'POST':
-        c = Categorias.objects.get(pk = request.POST['pk'])
         form = CateForm(request.POST, instance=c)
         if form.is_valid():
             cate = form.save(commit=False)
@@ -177,7 +144,10 @@ def editar_categoria(request):
             else:
                 cate.save()
                 return redirect('/categorias/')
-    return HttpResponse('ok')
+    else:
+        form = CateForm(instance=c)
+        
+    return render(request,'editCategoria.html',{'form':form})
 
 def lista_subcategorias(request):
     subcategorias = SubCategorias.objects.all()
@@ -189,17 +159,61 @@ def lista_subcategorias(request):
                 pass
             else:
                 sub.save()
+                return redirect('/subcategorias/')
     else:
         form = SubCateForm()
     return render(request,'subcategorias.html',{'subcategorias':subcategorias,'form': form})
-
 
 def editar_subcategoria(request,pk):
     subcategoria = SubCategorias.objects.get(pk = pk)
     if request.method == 'POST':
         form = SubCateForm(request.POST, instance=subcategoria)
         if form.is_valid():
-            pass
+            sub = form.save(commit=False)
+            if SubCategorias.objects.filter(nombre = sub.nombre):
+                pass
+            else:
+                sub.save()
+                return redirect('/subcategorias/')
     else:
         form = SubCateForm(instance=subcategoria)
-    return render(request,'',{'form':form})
+
+    return render(request,'editSubcategoria.html',{'form':form})
+
+def lista_proyectos(request):
+    proyectos = Proyectos.objects.values("expediente__numero","desarrolladora__nombre","nombre","responsable__username", "revisador__username").annotate(num_ingresos = Count("expediente"))
+    if request.method == 'POST':
+        form = ProyeForm(request.POST)
+        if form.is_valid():
+            proy = form.save(commit=False)
+            if Proyectos.objects.filter(expediente=proy.expediente):
+                pass
+            else:    
+                s = Estados.objects.get(status='R')
+                proy.status = s
+                d = timedelta(days=21)
+                print(type(proy.fecha_ingreso))
+                proy.fecha_programada = proy.fecha_ingreso + d
+                proy.ingreso = 1
+                proy.save()
+                return redirect('/proyectos/')
+    else:
+        form = ProyeForm()
+    return render(request,'proyectos.html',{'proyectos':proyectos,'form': form})
+
+def lista_ingresos(request, expediente):
+    proyectos = Proyectos.objects.filter(expediente__numero = expediente)
+    return render(request, "ingresos.html", {'proyectos': proyectos})
+
+def editar_proyecto(request,pk):
+    p = Proyectos.objects.get(pk = pk)
+    if request.method == 'POST':
+        form = ProyeEditForm(request.POST, instance=p)
+        if form.is_valid():
+            proye = form.save(commit=False)
+            proye.save()
+            return redirect('/proyectos/ingresos/'+proye.expediente.numero+'/')
+    else:
+        form = ProyeEditForm(instance=p)
+        
+    return render(request,'editProye.html',{'form':form})   
