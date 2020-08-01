@@ -1,0 +1,63 @@
+{% extends 'base.html' %}       
+{% load static %}
+
+
+{% block content %}
+    <div class="right_col" role="main"> <!-- page content -->
+        <div class="">
+            <div class="page-title">
+                <div class="clearfix"></div>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Editar Usuario</h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                </li>
+                                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                                </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <form class="form-horizontal form-label-left input_mask" method="post" id="add" name="add">
+                                {% csrf_token %}
+                                <div id="result"></div>
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Nombres<span class="required">*</span></label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        {{form.first_name}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Apellidos<span class="required">*</span></label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        {{form.last_name}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Email<span class="required">*</span></label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        {{form.email}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Administrador<span class="required">*</span></label>
+                                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                                {{form.is_superuser}}
+                                            </div>
+                                        </div>
+                                <div class="ln_solid"></div>
+                                <div class="form-group">
+                                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                                        <button id="save_data" type="submit" class="btn btn-success">Guardar</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /page content -->
+{% endblock %}

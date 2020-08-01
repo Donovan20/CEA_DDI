@@ -8,11 +8,11 @@
                 <div class="clearfix"></div>
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div> 
-                        <button type="button" class="btn btn-primary" >Regresar</button>
+                        <a href="/proyectos/"><button type="button" class="btn btn-primary" >Regresar</button></a>
                     </div>
                     <div class="x_panel">
                         <div class="x_title">
-                            <h2>Proyectos</h2>
+                            <h2>Ingresos</h2>
                             <ul class="nav navbar-right panel_toolbox">
                                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                 </li>
@@ -44,51 +44,39 @@
                                 <table class="table table-striped jambo_table bulk_action">
                                     <thead>
                                         <tr class="headings">
-                                            <th class="column-title">Expediente</th>
-                                            <th class="column-title">Desarrolladora</th>
-                                            <th class="column-title">Nombre Proyecto</th>
-                                            <th class="column-title">Tipo Proyecto</th>
-                                            <th class="column-title">Responsable</th>
-                                            <th class="column-title">Revisador</th>
                                             <th class="column-title">Folio Ingreso</th>
                                             <th class="column-title">Fecha de Ingreso</th>
                                             <th class="column-title">Fecha Programada</th>
+                                            <th class="column-title">Oficio Respuesta</th>
                                             <th class="column-title">Fecha de Respuesta</th>
                                             <th class="column-title">Status</th>
                                             <th class="column-title">No Ingreso</th>
-                                            <th class="column-title">Observaciones</th>
                                             <th class="column-title no-link last"><span class="nobr"></span></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {% for p in proyectos %}
+                                        {% for i in ingresos %}
                                             <tr class="even pointer">
-                                                <td style="width: 200px"> {{p.expediente}}</td>
-                                                <td style="width: 200px"> {{p.desarrolladora}}</td>
-                                                <td style="width: 200px"> {{p.nombre}}</td>
-                                                <td style="width: 200px"> {{p.tipo}}</td>
-                                                <td style="width: 200px"> {{p.responsable}}</td>
-                                                <td style="width: 200px"> {{p.revisador}}</td>
-                                                <td style="width: 200px"> {{p.folio}}</td>
-                                                <td style="width: 200px"> {{p.fecha_ingreso}}</td>
-                                                <td style="width: 200px"> {{p.fecha_programada}}</td>
-                                                {% if p.fecha_respuesta == None %}
+                                                <td style="width: 200px"> {{i.folio}}</td>
+                                                <td style="width: 200px"> {{i.fecha_ingreso}}</td>
+                                                <td style="width: 200px"> {{i.fecha_programada}}</td>
+                                                {% if i.oficio == None %}
+                                                <td style="width: 200px">-</td>
+                                                {% else %}
+                                                    <td style="width: 200px"> {{i.oficio}}</td>
+                                                {% endif %}
+                                                {% if i.fecha_respuesta == None %}
                                                     <td style="width: 200px">-</td>
                                                 {% else %}
-                                                    <td style="width: 200px"> {{p.fecha_respuesta}}</td>
+                                                    <td style="width: 200px"> {{i.fecha_respuesta}}</td>
                                                 {% endif %}
-                                                <td style="width: 200px"> {{p.status}}</td>
-                                                <td style="width: 200px"> {{p.ingreso}}</td>
-                                                {% if p.observaciones == none %}
-                                                    <td style="width: 200px">-</td>
-                                                {% else %}
-                                                    <td style= "width: 200px"> {{p.observaciones}}</td>
-                                                {% endif %}
+                                                <td style="width: 200px"> {{i.status}}</td>
+                                                <td style="width: 200px"> {{i.ingreso}}</td>
                                                 <td style="width: 150px"><span class="pull-right">
-                                                {% if p.status.status != "S" %}
-                                                    <a class='btn btn-default' title='Ver ingresos' href ="/proyectos/detalles/editar/{{p.pk}}/"><i class="glyphicon glyphicon-edit"></i></a> 
+                                                {% if i.status.status == "R" %}
+                                                    <a class='btn btn-default' title='Revisar ingreso' href ="/proyectos/detalles/revisar/{{i.pk}}/"><i class="glyphicon glyphicon-edit"></i></a> 
                                                 {% endif %}
-                                                <a class='btn btn-default' title='Aprobar Proyecto' ><i class="glyphicon glyphicon-check"></i> </a></span></td>
+                                                <a class='btn btn-default' title='Descargar Archivos' href ="/proyectos/detalles/archivos/{{i.pk}}/"><i class="glyphicon glyphicon-download"></i></a> 
                                             </tr>
                                         {% endfor %}
                                     </tbody>

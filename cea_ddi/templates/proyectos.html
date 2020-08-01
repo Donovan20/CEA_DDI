@@ -59,18 +59,6 @@
                                               {{form.revisador}}
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Folio<span class="required">*</span></label>
-                                            <div class="col-md-9 col-sm-9 col-xs-12">
-                                              {{form.folio}}
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Fecha de ingreso<span class="required">*</span></label>
-                                            <div class="col-md-9 col-sm-9 col-xs-12">
-                                              {{form.fecha_ingreso}}
-                                            </div>
-                                        </div>
                                         <div class="ln_solid"></div>
                                         <div class="form-group">
                                             <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
@@ -132,14 +120,14 @@
                                     <tbody>
                                         {% for p in proyectos %}
                                             <tr class="even pointer">
-                                                <td style="width: 200px"> {{p.expediente__numero}}</td>
-                                                <td style="width: 200px"> {{p.desarrolladora__nombre}}</td>
+                                                <td style="width: 200px"> {{p.expediente}}</td>
+                                                <td style="width: 200px"> {{p.desarrolladora}}</td>
                                                 <td style="width: 200px"> {{p.nombre}}</td>
-                                                <td style="width: 200px"> {{p.responsable__username}}</td>
-                                                <td style="width: 200px"> {{p.revisador__username}}</td>
-                                                <td style="width: 200px"> {{p.num_ingresos}}</td>
+                                                <td style="width: 200px"> {{p.responsable.first_name}} {{p.responsable.last_name}}</td>
+                                                <td style="width: 200px"> {{p.revisador.first_name}} {{p.revisador.last_name}}</td>
+                                                <td style="width: 200px"> {{p.ingreso}}</td>
                                                 <td style="width: 150px"><span class="pull-right">
-                                                <a class='btn btn-default' title='Ver ingresos' href ="/proyectos/detalles/{{p.expediente__numero}}/"><i class="glyphicon glyphicon-eye-open"></i></a> 
+                                                <a class='btn btn-default' title='Ver ingresos' href ="/proyectos/detalles/{{p.pk}}/"><i class="glyphicon glyphicon-eye-open"></i></a> 
                                                 <a class='btn btn-default' title='Aprobar Proyecto' ><i class="glyphicon glyphicon-check"></i> </a></span></td>
                                             </tr>
                                         {% endfor %}

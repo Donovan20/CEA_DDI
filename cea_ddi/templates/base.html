@@ -42,7 +42,7 @@
                 <div class="col-md-3 left_col">
                     <div class="left_col scroll-view">
                         <div class="navbar nav_title" style="border: 0;">
-                            <a href="dashboard.php"><img src="{% static 'img/logocea.png' %}" style="width: 230px; height: 57px; background: #EDEDED;"></a>
+                            <a href="/"><img src="{% static 'img/logocea.png' %}" style="width: 230px; height: 57px; background: #EDEDED;"></a>
                         </div>
                         <div class="clearfix"></div>
 
@@ -53,7 +53,7 @@
                             </div>
                             <div class="profile_info">
                                 <span>Bienvenido</span>
-                                <h2>prueba</h2>
+                                <h2>{{user.first_name}} {{user.last_name}}</h2>
                             </div>
                         </div>
                         <!-- /menu profile quick info -->
@@ -70,7 +70,7 @@
                                         <a href="/proyectos/"><i class="fa fa-list-alt"></i>Proyectos</a>
                                     </li>
                                     <li class="<?php if(isset($active2)){echo $active2;}?>">
-                                        <a href="archivos.php"><i class="fa fa-list-alt"></i> Archivos</a>
+                                        <a href="/user/proyectos/"><i class="fa fa-list-alt"></i>Mis Proyectos</a>
                                     </li>
                                     <li class="<?php if(isset($active3)){echo $active3;}?>">
                                         <a href="/expedientes/"><i class="fa fa-list-alt"></i> Expedientes</a>
@@ -91,10 +91,11 @@
                                     <li class="<?php if(isset($active8)){echo $active8;}?>">
                                         <a href="/subcategorias/"><i class="fa fa-align-left"></i> Subcategorias</a>
                                     </li>
-
-                                    <li class="<?php if(isset($active6)){echo $active6;}?>">
-                                        <a href="users.php"><i class="fa fa-users"></i> Usuarios</a>
-                                    </li>
+                                    {% if user.is_superuser %}
+                                        <li class="<?php if(isset($active6)){echo $active6;}?>">
+                                            <a href="/usuarios/"><i class="fa fa-users"></i> Usuarios</a>
+                                        </li>
+                                    {% endif %}
                                 </ul>
                             </div>
                         </div><!-- /sidebar menu -->
