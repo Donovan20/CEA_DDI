@@ -1,0 +1,96 @@
+<?php 
+$title ="Dashboard - "; 
+include "head.php";
+include "sidebar.php";
+?>
+ <link rel="stylesheet" href="css/style.css">
+<div class="right_col" role="main"> <!-- page content -->
+  <div class="">
+    <div class="page-title">
+      <div class="row top_tiles">
+        <div id="caja" class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+          <div class="tile-stats">
+            <br>
+            <a href=""><h3 id="tarjetas">Archivo 1</h3></a>
+            <br>
+          </div>
+        </div>
+        <div id="caja" class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+          <div class="tile-stats">
+           <br>
+            <a href=""><h3 id="tarjetas">Archivo 2</h3></a>
+           <br>
+         </div>
+       </div>
+       <div id="caja" class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="tile-stats">
+         <br>
+         <a href=""><h3 id="tarjetas">Archivo 3</h3></a>
+         <br>
+       </div>
+     </div>
+     <div id="caja" class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+      <div class="tile-stats">
+        <br>
+        <a href=""><h3 id="tarjetas">Archivo 4</h3></a>
+        <br>
+      </div>
+    </div>
+    <div id="caja" class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+      <div class="tile-stats">
+        <br>
+        <a href=""><h3 id="tarjetas">Archivo 5</h3></a>
+        <br>
+      </div>
+    </div>
+    <div id="caja" class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+      <div class="tile-stats">
+        <br>
+        <a href=""><h3 id="tarjetas">Archivo 6</h3></a>
+        <br>
+      </div>
+    </div>
+    <div  id="caja" class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+      <div class="tile-stats">
+        <br>
+        <a href="dashboard.php"><h3 id="tarjetas">Archivo 7</h3></a>
+        <br>
+      </div>
+    </div>
+    <div id="caja" class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+      <div class="tile-stats">
+        <br>
+        <a href=""><h3 id="tarjetas">Archivo 8</h3></a>
+        <br>
+      </div>
+    </div>
+  </div>
+  <!-- content -->
+    </div>
+  </div>
+</div>
+
+<!-- /page content -->
+
+
+
+<?php include "footer.php" ?>
+<script>
+  $(function(){
+    $("input[name='file']").on("change", function(){
+      var formData = new FormData($("#formulario")[0]);
+      var ruta = "action/upload-profile.php";
+      $.ajax({
+        url: ruta,
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(datos)
+        {
+          $("#respuesta").html(datos);
+        }
+      });
+    });
+  });
+</script>

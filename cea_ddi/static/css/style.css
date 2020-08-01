@@ -130,3 +130,8 @@ body {
   text-decoration: none;
   color: inherit;
 }
+#tarjetas{
+	font-size:33px;
+	text-align: center;
+	color: #1272b8;
+}
