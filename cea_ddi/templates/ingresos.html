@@ -23,25 +23,25 @@
                         </div>
                         
                         <!-- Form search -->
-                        <form class="form-horizontal" role="form" id="ingresos">
+                        <form class="form-horizontal" role="form" id="ingresos" >
                             <div class="form-group row">
-                                <label for="q" class="col-md-2 control-label">Numero</label>
+                                <label for="q" class="col-md-2 control-label">Buscar:</label>
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control" id="q" placeholder="Numero de Expediente" onkeyup='load(1);'>
+                                    <input type="text" class="form-control" id="searchTerm" placeholder="Ingresa el texto..." onkeyup="doSearch()">
                                 </div>
                                 <div class="col-md-3">
-                                    <button type="button" class="btn btn-default" onclick='load(1);'>
+                                    <button type="button" class="btn btn-default" onclick='doSearch()'>
                                         <span class="glyphicon glyphicon-search" ></span> Buscar</button>
                                     <span id="loader"></span>
                                 </div>
                             </div>
-                        </form>     
+                        </form>         
                         <!-- end Form search -->
 
 
                         <div class="x_content">
                             <div class="table-responsive">
-                                <table class="table table-striped jambo_table bulk_action">
+                                <table class="table table-striped jambo_table bulk_action" id=datos>
                                     <thead>
                                         <tr class="headings">
                                             <th class="column-title">Folio Ingreso</th>
@@ -49,6 +49,7 @@
                                             <th class="column-title">Fecha Programada</th>
                                             <th class="column-title">Oficio Respuesta</th>
                                             <th class="column-title">Fecha de Respuesta</th>
+                                            <th class="column-title">Observaciones</th>
                                             <th class="column-title">Status</th>
                                             <th class="column-title">No Ingreso</th>
                                             <th class="column-title no-link last"><span class="nobr"></span></th>
@@ -70,6 +71,11 @@
                                                 {% else %}
                                                     <td style="width: 200px"> {{i.fecha_respuesta}}</td>
                                                 {% endif %}
+                                                {% if i.observaciones == None %}
+                                                <td style="width: 200px">-</td>
+                                                {% else %}
+                                                    <td style="width: 200px"> {{i.observaciones}}</td>
+                                                {% endif %}
                                                 <td style="width: 200px"> {{i.status}}</td>
                                                 <td style="width: 200px"> {{i.ingreso}}</td>
                                                 <td style="width: 150px"><span class="pull-right">
@@ -88,5 +94,38 @@
             </div>
         </div>
     </div><!-- /page content -->
+    <script>
+        function doSearch(){
+            const tableReg = document.getElementById('datos');
+            const searchText = document.getElementById('searchTerm').value.toLowerCase();
+            let total = 0;
 
+            // Recorremos todas las filas con contenido de la tabla
+            for (let i = 1; i < tableReg.rows.length; i++) {
+                // Si el td tiene la clase "noSearch" no se busca en su cntenido
+                if (tableReg.rows[i].classList.contains("noSearch")) {
+                    continue;
+                }
+
+                let found = false;
+                const cellsOfRow = tableReg.rows[i].getElementsByTagName('td');
+                // Recorremos todas las celdas
+                for (let j = 0; j < cellsOfRow.length && !found; j++) {
+                    const compareWith = cellsOfRow[j].innerHTML.toLowerCase();
+                    // Buscamos el texto en el contenido de la celda
+                    if (searchText.length == 0 || compareWith.indexOf(searchText) > -1) {
+                        found = true;
+                        total++;
+                    }
+                }
+                if (found) {
+                    tableReg.rows[i].style.display = '';
+                } else {
+                    // si no ha encontrado ninguna coincidencia, esconde la
+                    // fila de la tabla
+                    tableReg.rows[i].style.display = 'none';
+                }
+            }
+        }
+    </script>
 {% endblock %}

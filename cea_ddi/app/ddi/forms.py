@@ -67,10 +67,12 @@ class ProyeForm(forms.ModelForm):
 class RevisarForm(forms.ModelForm):
     class Meta:
         model = Ingresos
-        fields = {'oficio', 'fecha_respuesta'}
+        fields = {'oficio', 'fecha_respuesta', 'observaciones', 'status'}
         widgets = {
             'oficio': forms.TextInput(attrs={'class': 'form-control'}),
             'fecha_respuesta': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'observaciones': forms.Textarea(attrs={'class': 'form-control'}),
+            'status': forms.Select(attrs={'class': 'form-control'}),
         }
 
 
@@ -99,3 +101,14 @@ class AproForm(forms.ModelForm):
     class Meta:
         model = Aprobados
         fields = '__all__'
+
+
+class NotaForm(forms.Form):
+    expediente = forms.ModelMultipleChoiceField(
+        queryset=Expediente.objects, widget=forms.Select(attrs={'class': 'form-control'}))
+    categoria = forms.ModelMultipleChoiceField(
+        queryset=SubCategorias.objects, widget=forms.Select(attrs={'class': 'form-control'}))
+    inicio = forms.DateTimeField(widget=forms.DateInput(
+        attrs={'class': 'form-control', 'type': 'date'}))
+    fin = forms.DateTimeField(widget=forms.DateInput(
+        attrs={'class': 'form-control', 'type': 'date'}))

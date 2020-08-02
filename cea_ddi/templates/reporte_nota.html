@@ -10,7 +10,7 @@
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="x_panel">
                         <div class="x_title">
-                            <h2>Editar Proyecto</h2>
+                            <h2>Generar Reporte</h2>
                             <ul class="nav navbar-right panel_toolbox">
                                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                 </li>
@@ -20,49 +20,42 @@
                             <div class="clearfix"></div>
                         </div>
                         <div class="x_content">
-                            <form class="form-horizontal form-label-left input_mask" method="POST" id="upd" name="upd" enctype="multipart/form-data">
+                            <form class="form-horizontal form-label-left input_mask" method="POST" id="upd" name="upd" enctype="multipart/form-data" target="_blank">
                                 {% csrf_token %}
                                 <input type="text" style="display: none;" id="pk" name="pk">
                                 <div id="result2"></div>
                                 <input type="hidden" name="mod_id" id="mod_id">
                                 <div class="form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Oficio Respuesta<span class="required">*</span>
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Expediente<span class="required">*</span>
                                     </label>
                                     <div class="col-md-9 col-sm-9 col-xs-12">
-                                        {{form.oficio}}
+                                        {{form.expediente}}
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Fecha de Revision<span class="required">*</span>
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Categoria<span class="required">*</span>
                                     </label>
                                     <div class="col-md-9 col-sm-9 col-xs-12">
-                                        {{form.fecha_respuesta}}
+                                        {{form.categoria}}
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Observaciones<span class="required">*</span>
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Fecha incial<span class="required">*</span>
                                     </label>
                                     <div class="col-md-9 col-sm-9 col-xs-12">
-                                        {{form.observaciones}}
+                                        {{form.inicio}}
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Estatus<span class="required">*</span>
-                                    </label>
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Fecha final<span class="required">*</span></label>
                                     <div class="col-md-9 col-sm-9 col-xs-12">
-                                        {{form.status}}
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Oficio respuesta<span class="required">*</span></label>
-                                    <div class="col-md-9 col-sm-9 col-xs-12">
-                                        <input type="file" class="form-control" name="files" multiple>
+                                        {{form.fin}}
                                     </div>
                                 </div>
                                 <div class="ln_solid"></div>
                                 <div class="form-group">
                                     <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                                    <button id="upd_data" type="submit" class="btn btn-success">Guardar</button>
+                                    <button id="upd_data" type="submit" class="btn btn-success">Generar</button>
                                     </div>
                                 </div>
                             </form>

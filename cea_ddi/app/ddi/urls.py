@@ -33,5 +33,9 @@ urlpatterns = [
     path('user/proyectos/ingresos/<str:pk>/', ddi.usuario_ingresos),
     path('user/proyectos/ingresos/archivos/<str:pk>/', ddi.ver_oficios),
     path('borrar/', ddi.eliminar, name='borrar'),
+    path('reportes/', ddi.ver_reportes),
+    path('reportes/nota_expediente/', ddi.reporte_nota_por_expediente),
+    path('reportes/ingresos_diarios/', ddi.reporte_ingresos_por_dia),
+    path('reportes/funcionarios/', ddi.reporte_funcionarios),
 
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

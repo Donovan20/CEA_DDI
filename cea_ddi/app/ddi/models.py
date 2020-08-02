@@ -77,6 +77,7 @@ class Ingresos(models.Model):
     fecha_respuesta = models.DateField(
         auto_now=False, auto_now_add=False, null=True, blank=True)
     dias = models.IntegerField(null=True, blank=True)
+    observaciones = models.TextField(null=True, blank=True)
 
 
 class Files(models.Model):

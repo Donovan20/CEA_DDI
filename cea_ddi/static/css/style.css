@@ -4,7 +4,6 @@
   box-sizing: border-box;
 }
 body {
-  background: url("/static/img/bg.jpg") no-repeat center;
   background-size: cover;
   font-family: sans-serif;
 }
@@ -130,8 +129,13 @@ body {
   text-decoration: none;
   color: inherit;
 }
-#tarjetas{
-	font-size:33px;
-	text-align: center;
-	color: #1272b8;
+#tarjetas {
+  font-size: 18px;
+  text-align: center;
+  color: #1272b8;
+}
+
+.tile-stats {
+  padding-top: 1em !important;
+  padding-bottom: 1em !important;
 }

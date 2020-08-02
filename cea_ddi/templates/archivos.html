@@ -23,8 +23,13 @@
                         </div>
                         <div class="x_content">
                             {% for f in files %}
-                                <a href="{{f.path}}" target="_blank"><button class="btn btn-primary">Descargar {{f.name}}</button></a>
+                                <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12 text-center align-middle">
+                                    <div class="tile-stats">
+                                        <a href="{{f.path}}" id="tarjetas"><i class="glyphicon glyphicon-save-file"></i>  {{f.name}}</a>
+                                    </div>
+                                </div>
                             {% endfor %}
+                            
                         </div>
                     </div>
                 </div>

@@ -1,0 +1,26 @@
+[
+  {
+    "model": "ddi.estados",
+    "pk": 1,
+    "fields": {
+      "status": "A",
+      "nombre": "Aprobado"
+    }
+  },
+  {
+    "model": "ddi.estados",
+    "pk": 2,
+    "fields": {
+      "status": "R",
+      "nombre": "En revision"
+    }
+  },
+  {
+    "model": "ddi.estados",
+    "pk": 3,
+    "fields": {
+      "status": "ER",
+      "nombre": "En espera de reingreso"
+    }
+  }
+]
