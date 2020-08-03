@@ -94,6 +94,7 @@
                                             <th class="column-title">Fecha Programada</th>
                                             <th class="column-title">Oficio Respuesta</th>
                                             <th class="column-title">Fecha de Respuesta</th>
+                                            <th class="column-title">Dias</th>
                                             <th class="column-title">Observaciones</th>
                                             <th class="column-title">Status</th>
                                             <th class="column-title">No Ingreso</th>
@@ -116,6 +117,11 @@
                                                 {% else %}
                                                     <td style="width: 200px"> {{i.fecha_respuesta}}</td>
                                                 {% endif %}
+                                                {% if i.dias == None %}
+                                                <td style="width: 200px">-</td>
+                                                {% else %}
+                                                    <td style="width: 200px"> {{i.dias}}</td>
+                                                {% endif %}
                                                 {% if i.observaciones == None %}
                                                 <td style="width: 200px">-</td>
                                                 {% else %}
@@ -127,7 +133,6 @@
                                                 {% if i.status.status != "R" %}
                                                     <a class='btn btn-default' title='Descargar respuestas' href ="/user/proyectos/ingresos/archivos/{{i.pk}}/"><i class="glyphicon glyphicon-download"></i></a> 
                                                 {% endif %}
-                                                
                                             </tr>
                                         {% endfor %}
                                     </tbody>

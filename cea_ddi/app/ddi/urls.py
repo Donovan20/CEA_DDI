@@ -26,7 +26,7 @@ urlpatterns = [
          ddi.lista_ingresos, name="ingresos"),
     path('proyectos/detalles/revisar/<str:pk>/',
          ddi.revisar_ingreso, name="revisar_ingreso"),
-    path('proyectos/detalles/editar/<str:pk>/',
+    path('proyectos/editar/<str:pk>/',
          ddi.editar_proyecto, name="ingresos"),
     path('proyectos/detalles/archivos/<str:pk>/', ddi.ver_archivos),
     path('user/proyectos/', ddi.usuario_proyectos),

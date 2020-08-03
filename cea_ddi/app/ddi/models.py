@@ -5,6 +5,13 @@ from cea_ddi.settings import MEDIA_URL
 # Create your models here.
 
 
+def get_first_name(self):
+    return self.first_name + " " + self.last_name
+
+
+User.add_to_class("__str__", get_first_name)
+
+
 class Expediente(models.Model):
     numero = models.CharField(max_length=11)
     fraccionamiento = models.CharField(max_length=150)

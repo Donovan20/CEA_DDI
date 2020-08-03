@@ -113,7 +113,6 @@ def lista_expedientes(request):
 
 
 @login_required
-@login_required
 def editar_expediente(request, pk):
 
     e = Expediente.objects.get(pk=pk)
@@ -135,7 +134,6 @@ def editar_expediente(request, pk):
     return render(request, 'editExpediente.html', {'form': form})
 
 
-@login_required
 @login_required
 def eliminar(request):
     url = ""
@@ -163,7 +161,6 @@ def eliminar(request):
 
 
 @login_required
-@login_required
 def lista_desarrolladoras(request):
     desarrolladoras = Desarrolladora.objects.all()
     if request.method == 'POST':
@@ -174,6 +171,7 @@ def lista_desarrolladoras(request):
                 pass
             else:
                 des.save()
+                return redirect("/desarrolladoras/")
     else:
         form = DesaForm()
     return render(request, 'desarrolladora.html', {'desarrolladoras': desarrolladoras, 'form': form})
@@ -198,7 +196,6 @@ def editar_desarrolladora(request, pk):
 
 
 @login_required
-@login_required
 def lista_categorias(request):
     categorias = Categorias.objects.all()
     if request.method == 'POST':
@@ -209,12 +206,12 @@ def lista_categorias(request):
                 pass
             else:
                 cate.save()
+                return redirect("/categorias/")
     else:
         form = CateForm()
     return render(request, 'categorias.html', {'categorias': categorias, 'form': form})
 
 
-@login_required
 @login_required
 def editar_categoria(request, pk):
     c = Categorias.objects.get(pk=pk)
@@ -234,8 +231,6 @@ def editar_categoria(request, pk):
 
 
 @login_required
-@login_required
-@login_required
 def lista_subcategorias(request):
     subcategorias = SubCategorias.objects.all()
     if request.method == 'POST':
@@ -252,7 +247,6 @@ def lista_subcategorias(request):
     return render(request, 'subcategorias.html', {'subcategorias': subcategorias, 'form': form})
 
 
-@login_required
 @login_required
 def editar_subcategoria(request, pk):
     subcategoria = SubCategorias.objects.get(pk=pk)
@@ -273,7 +267,7 @@ def editar_subcategoria(request, pk):
 
 @login_required
 def lista_proyectos(request):
-    proyectos = Proyectos.objects.filter(revisador=request.user)
+    proyectos = Proyectos.objects.all()
     print(proyectos)
     if request.method == 'POST':
         form = ProyeForm(request.POST)
@@ -291,7 +285,6 @@ def lista_proyectos(request):
 
 
 @login_required
-@login_required
 def lista_ingresos(request, pk):
     ingresos = Ingresos.objects.filter(proyecto__pk=pk)
     return render(request, "ingresos.html", {'ingresos': ingresos})
@@ -308,6 +301,7 @@ def revisar_ingreso(request, pk):
             p = Proyectos.objects.get(pk=i.proyecto.pk)
             path = "planos\\"+p.expediente.numero+"\\"+i.folio+"\\"
             i.status = s
+            i.dias = int(abs((i.fecha_respuesta - i.fecha_ingreso).days))
             i.save()
             for file in request.FILES.getlist('files'):
                 f = Files(file=file, ingreso=ingreso, tipo="Respuesta")
@@ -320,34 +314,29 @@ def revisar_ingreso(request, pk):
     return render(request, 'revisar_ingreso.html', {'form': form})
 
 
-@login_required
-@login_required
-@login_required
+@ login_required
 def editar_proyecto(request, pk):
     p = Proyectos.objects.get(pk=pk)
     if request.method == 'POST':
-        form = ProyeEditForm(request.POST, instance=p)
+        form = ProyeForm(request.POST, instance=p)
         if form.is_valid():
             print("paso")
             proye = form.save(commit=False)
             proye.save()
-            return redirect('/proyectos/detalles/'+proye.expediente.numero+'/')
-        else:
-            print(form.errors)
+            return redirect('/proyectos/')
     else:
-        form = ProyeEditForm(instance=p)
+        form = ProyeForm(instance=p)
 
     return render(request, 'editProye.html', {'form': form})
 
 
-@login_required
-@login_required
+@ login_required
 def usuario_proyectos(request):
     proyectos = Proyectos.objects.filter(responsable=request.user)
     return render(request, 'mis_proyectos.html', {'proyectos': proyectos})
 
 
-@login_required
+@ login_required
 def usuario_ingresos(request, pk):
     ingresos = Ingresos.objects.filter(proyecto__pk=pk)
     if request.method == 'POST':
@@ -392,13 +381,12 @@ def usuario_ingresos(request, pk):
     return render(request, "mis_ingresos.html", {'ingresos': ingresos, 'form': form})
 
 
-@login_required
-@login_required
+@ login_required
 def ver_archivos(request, pk):
-    """                                                                         
-    Send a file through Django without loading the whole file into              
-    memory at once. The FileWrapper will turn the file object into an           
-    iterator for chunks of 8KB.                                                 
+    """
+    Send a file through Django without loading the whole file into
+    memory at once. The FileWrapper will turn the file object into an
+    iterator for chunks of 8KB.
     """
     ingreso = Ingresos.objects.get(pk=pk)
     fs = Files.objects.filter(ingreso__pk=pk).filter(tipo="Ingreso")
@@ -414,13 +402,12 @@ def ver_archivos(request, pk):
     return render(request, "archivos.html", {'files': files})
 
 
-@login_required
-@login_required
+@ login_required
 def ver_oficios(request, pk):
-    """                                                                         
-    Send a file through Django without loading the whole file into              
-    memory at once. The FileWrapper will turn the file object into an           
-    iterator for chunks of 8KB.                                                 
+    """
+    Send a file through Django without loading the whole file into
+    memory at once. The FileWrapper will turn the file object into an
+    iterator for chunks of 8KB.
     """
     ingreso = Ingresos.objects.get(pk=pk)
     fs = Files.objects.filter(ingreso__pk=pk).filter(tipo="Respuesta")
@@ -436,12 +423,12 @@ def ver_oficios(request, pk):
     return render(request, "archivos.html", {'files': files})
 
 
-@login_required
+@ login_required
 def ver_reportes(request):
     return render(request, "reports.html")
 
 
-@login_required
+@ login_required
 def reporte_nota_por_expediente(request):
     if request.method == "POST":
         fecha_I = request.POST['inicio']
@@ -543,8 +530,7 @@ def reporte_nota_por_expediente(request):
     return render(request, 'reporte_nota.html', {'form': form})
 
 
-@login_required
-@login_required
+@ login_required
 def reporte_ingresos_por_dia(request):
     hoy = datetime.now()
     ingresos = Ingresos.objects.filter(fecha_ingreso=hoy)
@@ -635,7 +621,7 @@ def reporte_ingresos_por_dia(request):
         ws.cell(row=aux, column=8).border = borde
         aux += 1
 
-    nombre_archivo = "Reporte_diario_ingresos_del_" + \
+    nombre_archivo = "Reporte_diario_ingresos_del_" +\
         hoy.strftime("%d_%B_%Y")+"_.xlsx"
     response = HttpResponse(content_type="application/ms-excel")
     contenido = "attachment; filename={0}".format(nombre_archivo)
@@ -644,7 +630,7 @@ def reporte_ingresos_por_dia(request):
     return response
 
 
-@login_required
+@ login_required
 def reporte_funcionarios(request):
     matriz = []
     fecha_I = ""
