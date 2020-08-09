@@ -9,6 +9,8 @@ urlpatterns = [
     path('', ddi.index, name='index'),
     path('usuarios/', ddi.lista_usuarios, name='usuarios'),
     path('usuarios/editar/<str:pk>/', ddi.editar_usuario, name='editar_usuario'),
+    path('usuarios/actualizar_datos/', ddi.actualizar_datos),
+    path('usuarios/actualizar_imagen/', ddi.actualizar_imagen),
     path('expedientes/', ddi.lista_expedientes, name='expedientes'),
     path('expedientes/editar/<str:pk>/',
          ddi.editar_expediente, name='editar_expediente'),

@@ -96,7 +96,8 @@
                                             <th class="column-title">Fecha Programada</th>
                                             <th class="column-title">Oficio Respuesta</th>
                                             <th class="column-title">Fecha de Respuesta</th>
-                                            <th class="column-title">Dias</th>
+                                            <th class="column-title">Dias CEA</th>
+                                            <th class="column-title">Dias externos</th>
                                             <th class="column-title">Observaciones</th>
                                             <th class="column-title">Status</th>
                                             <th class="column-title">No Ingreso</th>
@@ -123,6 +124,11 @@
                                                 <td style="width: 200px">-</td>
                                                 {% else %}
                                                     <td style="width: 200px"> {{i.dias}}</td>
+                                                {% endif %}
+                                                {% if i.externos == None %}
+                                                <td style="width: 200px">-</td>
+                                                {% else %}
+                                                    <td style="width: 200px"> {{i.externos}}</td>
                                                 {% endif %}
                                                 {% if i.observaciones == None %}
                                                 <td style="width: 200px">-</td>

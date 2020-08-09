@@ -19,8 +19,16 @@
     "model": "ddi.estados",
     "pk": 3,
     "fields": {
-      "status": "ER",
+      "status": "E",
       "nombre": "En espera de reingreso"
+    }
+  },
+  {
+    "model": "ddi.estados",
+    "pk": 4,
+    "fields": {
+      "status": "I",
+      "nombre": "En espera de ingreso"
     }
   }
 ]

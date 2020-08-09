@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 <div class="right_col" role="main"> <!-- page content -->
   <div class="">
@@ -6,16 +7,20 @@
       <div class="row top_tiles">
         <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
           <div class="tile-stats">
-            <div class="icon"><i class="fa fa-ticket"></i></div>
-            <div class="count"><h1>{{proyectos}}</h1></div>
-            <h3>Mis Proyectos</h3>
-          </div>
-        </div>
+           <div class="count"><h1>{{e}}</h1></div>
+           <h3>En espera de reingreso</h3>
+         </div>
+       </div>
         <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
           <div class="tile-stats">
-           <div class="icon"><i class="fa fa-list-alt"></i></div>
-           <div class="count"><h1>{{exp}}</h1></div>
-           <h3>Proyectos</h3>
+            <div class="count"><h1>{{r}}</h1></div>
+            <h3>En revision</h3>
+          </div>
+        </div>
+       <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+          <div class="tile-stats">
+           <div class="count"><h1>{{a}}</h1></div>
+           <h3>Aprobados</h3>
          </div>
        </div>
       </div>
@@ -25,11 +30,16 @@
   <div class="row">
     <div class="col-md-4">
       <div class="image view view-first">
-        <img class="thumb-image" style="width: 100%; display: block;" src="../static/img/profiles/default.png" alt="image" />
+        {% if request.user.imagen %}
+          <img class="thumb-image" style="width: 100%; display: block;" src="http://127.0.0.1:8000/static/img/profiles/{{request.user.imagen}}" alt="image" />
+        {% else %}
+          <img src="{% static 'img/profiles/default.png' %}" style="width: 100%; display: block;">
+        {% endif %}
       </div>
       <span class="btn btn-my-button btn-file">
-        <form method="post" id="formulario" enctype="multipart/form-data">
-          Cambiar Imagen de perfil: <input type="file" name="file">
+        <form method="post" id="formulario" enctype="multipart/form-data" name="formulario" action="/usuarios/actualizar_imagen/">
+          {% csrf_token %}
+          Cambiar Imagen de perfil: <input type="file" name="imagen" onchange="submitform()">
         </form>
       </span>
       <div id="respuesta"></div>
@@ -46,19 +56,27 @@
         </div>
         <div class="x_content">
           <br />
-          <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" action="action/upd_profile.php" method="post">
+          <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" action="/usuarios/actualizar_datos/" method="post">
+            {% csrf_token %}
             <div class="form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Nombre
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" name="">Nombre
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <input type="text" name="name" id="first-name" class="form-control col-md-7 col-xs-12" value="">
+                <input type="text" name="nombre" id="first-name" class="form-control col-md-7 col-xs-12" value="{{request.user.first_name}}">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Apellido
+              </label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <input type="text" name="apellido" id="last-name" class="form-control col-md-7 col-xs-12" value="{{request.user.last_name}}">
               </div>
             </div>
             <div class="form-group">
               <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Correo electronico 
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <input type="text" id="last-name" name="email" class="form-control col-md-7 col-xs-12" value="">
+                <input type="text" id="email" name="email" class="form-control col-md-7 col-xs-12" value="{{request.user.email}}">
               </div>
             </div>
 
@@ -69,21 +87,21 @@
               <label class="control-label col-md-3 col-sm-3 col-xs-12">Contraseña antigua
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <input id="birthday" name="password" class="date-picker form-control col-md-7 col-xs-12" type="text" placeholder="**********">
+                <input id="antigua" name="actual" class="date-picker form-control col-md-7 col-xs-12" type="password" placeholder="**********">
               </div>
             </div>
             <div class="form-group">
               <label class="control-label col-md-3 col-sm-3 col-xs-12">Nueva contraseña 
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <input id="birthday" name="new_password" class="date-picker form-control col-md-7 col-xs-12" type="text">
+                <input id="nueva" name="nueva" class="date-picker form-control col-md-7 col-xs-12" type="password">
               </div>
             </div>
             <div class="form-group">
               <label class="control-label col-md-3 col-sm-3 col-xs-12">Confirmar contraseña nueva
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <input id="birthday" name="confirm_new_password" class="date-picker form-control col-md-7 col-xs-12" type="text">
+                <input id="confirmar" name="confirmar" class="date-picker form-control col-md-7 col-xs-12" type="password">
               </div>
             </div>
             <div class="ln_solid"></div>
@@ -100,5 +118,17 @@
     </div>
   </div>
 </div>
-
+{% for message in messages %}
+  {% if message|stringformat:'s' == "no" %}
+      <script>alert("La contraseña actual es incorrecta")</script>
+  {% endif %}
+  {% if message|stringformat:'s' == "nueva" %}
+      <script>alert("Las contraseñas no coinciden")</script>
+  {% endif %}
+{% endfor %}
+<script>
+function submitform(){
+  document.forms["formulario"].submit();
+}
+</script>
 {% endblock %}

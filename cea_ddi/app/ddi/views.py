@@ -2,10 +2,11 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.db.models import Count
 from django.http import HttpResponse
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
 from django.http import HttpResponse
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 from wsgiref.util import FileWrapper
 
@@ -45,9 +46,10 @@ from json import dumps
 
 @login_required
 def index(request):
-    p = Proyectos.objects.filter(responsable=request.user).count()
-    p2 = Proyectos.objects.filter(revisor=request.user).count
-    return render(request, 'dashboard.html', {'proyectos': p, 'exp': p2})
+    e = Proyectos.objects.filter(revisor=request.user).filter(status=3).count()
+    r = Proyectos.objects.filter(revisor=request.user).filter(status=2).count()
+    a = Proyectos.objects.filter(revisor=request.user).filter(status=1).count()
+    return render(request, 'dashboard.html', {'e': e, 'r': r, 'a': a})
 
 
 @login_required
@@ -79,7 +81,7 @@ def editar_usuario(request, pk):
         form = UserForm(request.POST, request.FILES, instance=u)
         if form.is_valid():
             us = form.save(commit=False)
-            if Usuario.objects.filter(username=us.email):
+            if Usuario.objects.filter(username=us.email).exclude(pk=u.pk):
                 pass
             else:
                 s = slice(3)
@@ -89,10 +91,57 @@ def editar_usuario(request, pk):
                 u.imagen.storage.location = 'static\\img\\profiles\\'
                 us.save()
                 return redirect('/usuarios/')
+        else:
+            a = form.errors()
+            print(a)
     else:
         form = UserForm(instance=u)
 
     return render(request, 'editUser.html', {'form': form})
+
+
+def actualizar_datos(request):
+    u = Usuario.objects.get(pk=request.user.pk)
+    if request.method == "POST":
+        nombre = request.POST['nombre']
+        apellido = request.POST['apellido']
+        email = request.POST['email']
+        actual = request.POST['actual']
+        nueva = request.POST['nueva']
+        confirmar = request.POST['confirmar']
+        if check_password(actual, u.password):
+            u.first_name = nombre
+            u.last_name = apellido
+            u.email = email
+            u.username = email
+            if nueva != "":
+                if nueva == confirmar:
+                    u.password = make_password(confirmar)
+                    u.save()
+                    return redirect('/')
+                else:
+                    messages.error(request, 'nueva')
+                    return redirect('/')
+
+            else:
+                u.save()
+                return redirect('/')
+        else:
+            messages.error(request, 'no')
+            return redirect('/')
+
+
+def actualizar_imagen(request):
+    u = Usuario.objects.get(pk=request.user.pk)
+    if request.method == "POST":
+        imagen = request.FILES['imagen']
+
+        with open(BASE_DIR+'/static/img/profiles/'+imagen.name, 'wb+') as destination:
+            for chunk in imagen.chunks():
+                destination.write(chunk)
+        u.imagen = imagen.name
+        u.save()
+        return redirect('/')
 
 
 @login_required
@@ -286,7 +335,7 @@ def lista_proyectos(request):
             if Proyectos.objects.filter(expediente=proy.expediente):
                 pass
             else:
-                s = Estados.objects.get(status='E')
+                s = Estados.objects.get(status='I')
                 proy.ingreso = 0
                 proy.status = s
                 proy.save()
@@ -309,7 +358,7 @@ def lista_ingresos(request, pk):
                 pass
             else:
                 s = Estados.objects.get(status='R')
-                path = "planos\\"+p.expediente.numero+"\\"
+                path = "planos\\"+proyecto.expediente.numero+"\\"
                 if os.path.exists(os.path.join(BASE_DIR, path)):
                     path = path + i.folio+"\\"
                     if os.path.exists(os.path.join(BASE_DIR, path)):
@@ -328,7 +377,12 @@ def lista_ingresos(request, pk):
                 i.proyecto = proyecto
                 d = timedelta(days=21)
                 i.fecha_programada = i.fecha_ingreso + d
-                i.ingreso = p.ingreso + 1
+                i.ingreso = proyecto.ingreso + 1
+                if proyecto.ingreso >= 1:
+                    temporal = Ingresos.objects.get(
+                        Q(ingreso=proyecto.ingreso) & Q(proyecto__pk=proyecto.pk))
+                    i.externos = int(
+                        abs((i.fecha_ingreso-temporal.fecha_respuesta).days))
                 i.save()
                 for file in request.FILES.getlist('files'):
                     f = Files(file=file, ingreso=i, tipo="Ingreso")

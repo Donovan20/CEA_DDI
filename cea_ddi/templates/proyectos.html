@@ -130,7 +130,7 @@
                                                 <td style="width: 200px"> {{p.status}}</td>
                                                 <td style="width: 150px"><span class="pull-right">
                                                 <a class='btn btn-default' title='Ver ingresos' href ="/proyectos/detalles/{{p.pk}}/"><i class="glyphicon glyphicon-eye-open"></i></a> 
-                                                {% if p.revisador.pk == request.user.pk %}
+                                                {% if p.responsable.pk == request.user.pk %}
                                                     <a class='btn btn-default' title='Editar Proyecto' href="/proyectos/editar/{{p.pk}}"><i class="glyphicon glyphicon-edit"></i> </a></span></td>
                                                 {% endif %}
                                             </tr>
