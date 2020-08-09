@@ -54,9 +54,9 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Revisador<span class="required">*</span></label>
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Revisor<span class="required">*</span></label>
                                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                              {{form.revisador}}
+                                              {{form.revisor}}
                                             </div>
                                         </div>
                                         <div class="ln_solid"></div>
@@ -111,8 +111,9 @@
                                             <th class="column-title">Nombre Proyecto</th>
                                             <th class="column-title">Categoria</th>
                                             <th class="column-title">Responsable</th>
-                                            <th class="column-title">Revisador</th>
+                                            <th class="column-title">Revisor</th>
                                             <th class="column-title">No Ingresos</th>
+                                            <th class="column-title">Estatus</th>
                                             <th class="column-title no-link last"><span class="nobr"></span></th>
                                         </tr>
                                     </thead>
@@ -124,8 +125,9 @@
                                                 <td style="width: 200px"> {{p.nombre}}</td>
                                                 <td style="width: 200px"> {{p.tipo}}</td>
                                                 <td style="width: 200px"> {{p.responsable.first_name}} {{p.responsable.last_name}}</td>
-                                                <td style="width: 200px"> {{p.revisador.first_name}} {{p.revisador.last_name}}</td>
+                                                <td style="width: 200px"> {{p.revisor.first_name}} {{p.revisor.last_name}}</td>
                                                 <td style="width: 200px"> {{p.ingreso}}</td>
+                                                <td style="width: 200px"> {{p.status}}</td>
                                                 <td style="width: 150px"><span class="pull-right">
                                                 <a class='btn btn-default' title='Ver ingresos' href ="/proyectos/detalles/{{p.pk}}/"><i class="glyphicon glyphicon-eye-open"></i></a> 
                                                 {% if p.revisador.pk == request.user.pk %}

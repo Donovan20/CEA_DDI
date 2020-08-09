@@ -1,15 +1,15 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from cea_ddi.settings import MEDIA_URL
 
 # Create your models here.
 
 
-def get_first_name(self):
-    return self.first_name + " " + self.last_name
+class Usuario(AbstractUser):
+    imagen = models.FileField(upload_to='', blank=True, null=True)
 
-
-User.add_to_class("__str__", get_first_name)
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
 
 
 class Expediente(models.Model):
@@ -47,12 +47,6 @@ class SubCategorias(models.Model):
 
 class Estados(models.Model):
 
-    s = (
-        ('A', 'Aprobado'),
-        ('E', 'En espera de reingreso'),
-        ('R', 'En revision'),
-        ('I', 'Revisado')
-    )
     status = models.CharField(max_length=1, default='R')
     nombre = models.CharField(max_length=50, default='En revision')
 
@@ -67,9 +61,10 @@ class Proyectos(models.Model):
         Desarrolladora, on_delete=models.CASCADE)
     tipo = models.ForeignKey(SubCategorias, on_delete=models.CASCADE)
     responsable = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='responsable')
-    revisador = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='revisador')
+        Usuario, on_delete=models.CASCADE, related_name='responsable')
+    revisor = models.ForeignKey(
+        Usuario, on_delete=models.CASCADE, related_name='revisor')
+    status = models.ForeignKey(Estados, on_delete=models.CASCADE)
     ingreso = models.IntegerField()
 
 
@@ -92,10 +87,3 @@ class Files(models.Model):
         null=True, blank=True, upload_to='')
     ingreso = models.ForeignKey(Ingresos, on_delete=models.CASCADE)
     tipo = models.CharField(max_length=30)
-
-
-class Aprobados(models.Model):
-    proyecto = models.ForeignKey(Proyectos, on_delete=models.CASCADE)
-    gasto_m3_seg = models.IntegerField()
-    vivienda = models.CharField(max_length=50)
-    costo = models.IntegerField()

@@ -4,9 +4,8 @@ from app.ddi.models import Desarrolladora
 from app.ddi.models import Categorias
 from app.ddi.models import SubCategorias
 from app.ddi.models import Proyectos
-from app.ddi.models import Aprobados
 from app.ddi.models import Ingresos
-from django.contrib.auth.models import User
+from app.ddi.models import Usuario
 
 
 class ExpForm(forms.ModelForm):
@@ -53,14 +52,14 @@ class ProyeForm(forms.ModelForm):
     class Meta:
         model = Proyectos
         fields = {'nombre', 'expediente', 'desarrolladora', 'tipo',
-                  'responsable', 'revisador'}
+                  'responsable', 'revisor'}
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
             'expediente': forms.Select(attrs={'class': 'form-control'}),
             'desarrolladora': forms.Select(attrs={'class': 'form-control'}),
             'tipo': forms.Select(attrs={'class': 'form-control'}),
             'responsable': forms.Select(attrs={'class': 'form-control'}),
-            'revisador': forms.Select(attrs={'class': 'form-control'}),
+            'revisor': forms.Select(attrs={'class': 'form-control'}),
         }
 
 
@@ -88,19 +87,14 @@ class IngresoForm(forms.ModelForm):
 
 class UserForm(forms.ModelForm):
     class Meta:
-        model = User
-        fields = {'first_name', 'last_name', 'email', 'is_superuser'}
+        model = Usuario
+        fields = {'first_name', 'last_name', 'email', 'is_superuser', 'imagen'}
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.TextInput(attrs={'class': 'form-control', 'type': 'email'}),
+            'imagen': forms.FileInput(attrs={'class': 'form-control', 'type': 'file'}),
         }
-
-
-class AproForm(forms.ModelForm):
-    class Meta:
-        model = Aprobados
-        fields = '__all__'
 
 
 class NotaForm(forms.Form):

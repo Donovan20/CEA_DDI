@@ -9,8 +9,8 @@ from django.contrib.auth.decorators import login_required
 
 from wsgiref.util import FileWrapper
 
-from django.contrib.auth.models import User
 from cea_ddi.settings import BASE_DIR
+from app.ddi.models import Usuario
 from app.ddi.forms import UserForm
 from app.ddi.models import Expediente
 from app.ddi.forms import ExpForm
@@ -46,24 +46,25 @@ from json import dumps
 @login_required
 def index(request):
     p = Proyectos.objects.filter(responsable=request.user).count()
-    p2 = Proyectos.objects.filter(revisador=request.user).count
+    p2 = Proyectos.objects.filter(revisor=request.user).count
     return render(request, 'dashboard.html', {'proyectos': p, 'exp': p2})
 
 
 @login_required
 def lista_usuarios(request):
-    usuarios = User.objects.all()
+    usuarios = Usuario.objects.all()
     if request.method == 'POST':
-        form = UserForm(request.POST)
+        form = UserForm(request.POST, request.FILES)
         if form.is_valid():
             u = form.save(commit=False)
-            if User.objects.filter(username=u.email):
+            if Usuario.objects.filter(username=u.email):
                 pass
             else:
                 s = slice(3)
                 p = u.first_name[s] + u.last_name[s] + ".@"
                 u.password = make_password(p)
                 u.username = u.email
+                u.imagen.storage.location = 'static\\img\\profiles\\'
                 u.save()
                 return redirect('/usuarios/')
     else:
@@ -73,14 +74,19 @@ def lista_usuarios(request):
 
 @login_required
 def editar_usuario(request, pk):
-    u = User.objects.get(pk=pk)
+    u = Usuario.objects.get(pk=pk)
     if request.method == 'POST':
-        form = UserForm(request.POST, instance=u)
+        form = UserForm(request.POST, request.FILES, instance=u)
         if form.is_valid():
             us = form.save(commit=False)
-            if User.objects.filter(username=us.email):
+            if Usuario.objects.filter(username=us.email):
                 pass
             else:
+                s = slice(3)
+                p = u.first_name[s] + u.last_name[s] + ".@"
+                u.password = make_password(p)
+                u.username = u.email
+                u.imagen.storage.location = 'static\\img\\profiles\\'
                 us.save()
                 return redirect('/usuarios/')
     else:
@@ -99,7 +105,9 @@ def lista_expedientes(request):
             exp = form.save(commit=False)
             folio = compile(
                 r'^[A-z][A-z]\-[0-9][0-9][0-9]\-[0-9][0-9]\-[A-z]$')
-            if folio.match(exp.numero):
+            folio2 = compile(
+                r'^[A-z][A-z]\-[0-9][0-9][0-9]\-[0-9][0-9]$')
+            if folio.match(exp.numero) or folio2.match(exp.numero):
                 if Expediente.objects.filter(numero=exp.numero):
                     pass
                 else:
@@ -122,7 +130,9 @@ def editar_expediente(request, pk):
             exp = form.save(commit=False)
             folio = compile(
                 r'^[A-z][A-z]\-[0-9][0-9][0-9]\-[0-9][0-9]\-[A-z]$')
-            if folio.match(exp.numero):
+            folio2 = compile(
+                r'^[A-z][A-z]\-[0-9][0-9][0-9]\-[0-9][0-9]$')
+            if folio.match(exp.numero) or folio2.match(exp.numero):
                 if Expediente.objects.filter(numero=exp.numero):
                     pass
                 else:
@@ -276,7 +286,9 @@ def lista_proyectos(request):
             if Proyectos.objects.filter(expediente=proy.expediente):
                 pass
             else:
+                s = Estados.objects.get(status='E')
                 proy.ingreso = 0
+                proy.status = s
                 proy.save()
                 return redirect('/proyectos/')
     else:
@@ -287,7 +299,47 @@ def lista_proyectos(request):
 @login_required
 def lista_ingresos(request, pk):
     ingresos = Ingresos.objects.filter(proyecto__pk=pk)
-    return render(request, "ingresos.html", {'ingresos': ingresos})
+    proyecto = Proyectos.objects.get(pk=pk)
+    responsable = proyecto.responsable
+    if request.method == 'POST':
+        form = IngresoForm(request.POST, request.FILES)
+        if form.is_valid():
+            i = form.save(commit=False)
+            if Ingresos.objects.filter(folio=i.folio):
+                pass
+            else:
+                s = Estados.objects.get(status='R')
+                path = "planos\\"+p.expediente.numero+"\\"
+                if os.path.exists(os.path.join(BASE_DIR, path)):
+                    path = path + i.folio+"\\"
+                    if os.path.exists(os.path.join(BASE_DIR, path)):
+                        pass
+                    else:
+                        os.mkdir(os.path.join(BASE_DIR, path))
+                else:
+                    os.mkdir(os.path.join(BASE_DIR, path))
+                    path = path + i.folio+"\\"
+                    if os.path.exists(os.path.join(BASE_DIR, path)):
+                        pass
+                    else:
+                        os.mkdir(os.path.join(BASE_DIR, path))
+                i.status = s
+                proyecto.status = s
+                i.proyecto = proyecto
+                d = timedelta(days=21)
+                i.fecha_programada = i.fecha_ingreso + d
+                i.ingreso = p.ingreso + 1
+                i.save()
+                for file in request.FILES.getlist('files'):
+                    f = Files(file=file, ingreso=i, tipo="Ingreso")
+                    f.file.storage.location = os.path.join(BASE_DIR, path)
+                    f.save()
+                proyecto.ingreso += 1
+                proyecto.save()
+                return redirect('/proyectos/detalles/'+pk+"/")
+    else:
+        form = IngresoForm()
+    return render(request, "ingresos.html", {'ingresos': ingresos, 'form': form, 'responsable': responsable})
 
 
 @login_required
@@ -301,13 +353,15 @@ def revisar_ingreso(request, pk):
             p = Proyectos.objects.get(pk=i.proyecto.pk)
             path = "planos\\"+p.expediente.numero+"\\"+i.folio+"\\"
             i.status = s
+            p.status = s
             i.dias = int(abs((i.fecha_respuesta - i.fecha_ingreso).days))
             i.save()
+            p.save()
             for file in request.FILES.getlist('files'):
                 f = Files(file=file, ingreso=ingreso, tipo="Respuesta")
                 f.file.storage.location = path
                 f.save()
-            return redirect('/proyectos/detalles/'+str(p.pk)+"/")
+            return redirect('/user/proyectos/ingresos/'+str(p.pk)+"/")
     else:
         form = RevisarForm(instance=ingreso)
 
@@ -332,53 +386,14 @@ def editar_proyecto(request, pk):
 
 @ login_required
 def usuario_proyectos(request):
-    proyectos = Proyectos.objects.filter(responsable=request.user)
+    proyectos = Proyectos.objects.filter(revisor=request.user)
     return render(request, 'mis_proyectos.html', {'proyectos': proyectos})
 
 
 @ login_required
 def usuario_ingresos(request, pk):
     ingresos = Ingresos.objects.filter(proyecto__pk=pk)
-    if request.method == 'POST':
-        form = IngresoForm(request.POST, request.FILES)
-        if form.is_valid():
-            i = form.save(commit=False)
-            if Ingresos.objects.filter(folio=i.folio):
-                pass
-            else:
-                s = Estados.objects.get(status='R')
-                p = Proyectos.objects.get(pk=pk)
-                path = "planos\\"+p.expediente.numero+"\\"
-                if os.path.exists(os.path.join(BASE_DIR, path)):
-                    path = path + i.folio+"\\"
-                    if os.path.exists(os.path.join(BASE_DIR, path)):
-                        pass
-                    else:
-                        os.mkdir(os.path.join(BASE_DIR, path))
-                else:
-                    os.mkdir(os.path.join(BASE_DIR, path))
-                    path = path + i.folio+"\\"
-                    if os.path.exists(os.path.join(BASE_DIR, path)):
-                        pass
-                    else:
-                        os.mkdir(os.path.join(BASE_DIR, path))
-                i.status = s
-                i.proyecto = p
-                d = timedelta(days=21)
-                i.fecha_programada = i.fecha_ingreso + d
-                i.ingreso = p.ingreso + 1
-                i.save()
-                for file in request.FILES.getlist('files'):
-                    f = Files(file=file, ingreso=i, tipo="Ingreso")
-                    f.file.storage.location = os.path.join(BASE_DIR, path)
-                    f.save()
-                p.ingreso += 1
-                p.save()
-                return redirect('/user/proyectos/ingresos/'+pk+"/")
-    else:
-        form = IngresoForm()
-
-    return render(request, "mis_ingresos.html", {'ingresos': ingresos, 'form': form})
+    return render(request, "mis_ingresos.html", {'ingresos': ingresos})
 
 
 @ login_required

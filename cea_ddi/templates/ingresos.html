@@ -9,7 +9,54 @@
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div> 
                         <a href="/proyectos/"><button type="button" class="btn btn-primary" >Regresar</button></a>
+                        {% if responsable == request.user %}
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg-new"><i class="fa fa-plus-circle"></i> Agregar Ingreso</button>
+                        {% endif %}
                     </div>
+                    <div class="modal fade bs-example-modal-lg-new" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-md">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel">Agregar Ingreso</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="form-horizontal form-label-left input_mask" method="post" id="add" name="add" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div id="result"></div>
+                                         <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Folio de ingreso<span class="required">*</span></label>
+                                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                              {{form.folio}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Fecha de ingreso<span class="required">*</span></label>
+                                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                              {{form.fecha_ingreso}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Documentos<span class="required">*</span></label>
+                                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                              <input type="file" class="form-control" name="files" multiple>
+                                            </div>
+                                        </div>
+                                        <div class="ln_solid"></div>
+                                        <div class="form-group">
+                                            <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                                              <button id="save_data" type="submit" class="btn btn-success">Guardar</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- /Modal -->
                     <div class="x_panel">
                         <div class="x_title">
                             <h2>Ingresos</h2>
@@ -35,13 +82,13 @@
                                     <span id="loader"></span>
                                 </div>
                             </div>
-                        </form>         
+                        </form>     
                         <!-- end Form search -->
 
 
                         <div class="x_content">
                             <div class="table-responsive">
-                                <table class="table table-striped jambo_table bulk_action" id=datos>
+                                <table class="table table-striped jambo_table bulk_action" id="datos">
                                     <thead>
                                         <tr class="headings">
                                             <th class="column-title">Folio Ingreso</th>
@@ -85,10 +132,9 @@
                                                 <td style="width: 200px"> {{i.status}}</td>
                                                 <td style="width: 200px"> {{i.ingreso}}</td>
                                                 <td style="width: 150px"><span class="pull-right">
-                                                {% if i.status.status == "R" and i.proyecto.revisador.pk == request.user.pk %}
-                                                    <a class='btn btn-default' title='Revisar ingreso' href ="/proyectos/detalles/revisar/{{i.pk}}/"><i class="glyphicon glyphicon-edit"></i></a> 
+                                                {% if i.status.status != "R" %}
+                                                    <a class='btn btn-default' title='Descargar respuestas' href ="/user/proyectos/ingresos/archivos/{{i.pk}}/"><i class="glyphicon glyphicon-download"></i></a> 
                                                 {% endif %}
-                                                <a class='btn btn-default' title='Descargar Archivos' href ="/proyectos/detalles/archivos/{{i.pk}}/"><i class="glyphicon glyphicon-download"></i></a> 
                                             </tr>
                                         {% endfor %}
                                     </tbody>
